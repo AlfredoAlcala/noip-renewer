@@ -119,6 +119,8 @@ if __name__ == "__main__":
     profile.set_preference("general.useragent.override", get_user_agent())
     browser_options = webdriver.FirefoxOptions()
     browser_options.add_argument("--headless")
+    browser_options.add_argument("--disable-blink-features=AutomationControlled")
+    browser_options.add_argument("--window-size=1920,1080")
     browser_options.profile = profile
     service = Service()
     browser = webdriver.Firefox(options=browser_options, service=service)
@@ -142,6 +144,7 @@ if __name__ == "__main__":
                 lambda browser: browser.find_element(by=By.ID, value="username")
             )
         except TimeoutException:
+            browser.save_screenshot("error.png")
             exit_with_error(
                 message="Username input not found within the specified timeout."
             )
