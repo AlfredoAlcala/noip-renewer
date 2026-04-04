@@ -16,8 +16,13 @@ jobs:
         run: docker build -t local-noip-renewer .
 
       - name: Run No-IP Renewer
+        env:
+          USER: ${{ secrets.NO_IP_USERNAME }}
+          PASS: ${{ secrets.NO_IP_PASSWORD }}
+          TOTP: ${{ secrets.NO_IP_TOTP_KEY }}
         run: |
           docker run --rm \
-            -e NO_IP_USERNAME="${{ secrets.NO_IP_USERNAME }}" \
-            -e NO_IP_PASSWORD="${{ secrets.NO_IP_PASSWORD }}" \
+            -e NO_IP_USERNAME="$USER" \
+            -e NO_IP_PASSWORD="$PASS" \
+            -e NO_IP_TOTP_KEY="$TOTP" \
             local-noip-renewer
