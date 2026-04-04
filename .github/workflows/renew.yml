@@ -9,8 +9,15 @@ jobs:
   noip-renew:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build local Docker image
+        run: docker build -t local-noip-renewer .
+
       - name: Run No-IP Renewer
-        uses: docker://simaosilva/noip-renewer:latest
-        env:
-          NOIP_USERNAME: ${{ secrets.NO_IP_USERNAME }}
-          NOIP_PASSWORD: ${{ secrets.NO_IP_PASSWORD }}
+        run: |
+          docker run --rm \
+            -e NO_IP_USERNAME="${{ secrets.NO_IP_USERNAME }}" \
+            -e NO_IP_PASSWORD="${{ secrets.NO_IP_PASSWORD }}" \
+            local-noip-renewer
