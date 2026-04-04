@@ -1,21 +1,34 @@
-name: No-IP Renewer
+name: No-IP Auto Renew
 
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Allows you to run it manually
   schedule:
-    - cron: '0 0 */15 * *' # This runs it automatically every 15 days
+    - cron: '0 0 */15 * *' # Runs every 15 days automatically
 
 jobs:
-  renew:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run No-IP Renewer
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
         run: |
-          docker build -t noip-renewer .
-          docker run --rm \
-            -e NOIP_USERNAME="${{ secrets.NOIP_USERNAME }}" \
-            -e NOIP_PASSWORD="${{ secrets.NOIP_PASSWORD }}" \
-            noip-renewer
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Firefox
+        uses: browser-actions/setup-firefox@v1
+
+      - name: Run Renew Script
+        env:
+          # These use the secrets you already created in your settings
+          NO_IP_USERNAME: ${{ secrets.NOIP_USERNAME }}
+          NO_IP_PASSWORD: ${{ secrets.NOIP_PASSWORD }}
+        run: python renew.py
