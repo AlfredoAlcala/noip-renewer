@@ -3,7 +3,7 @@ name: No-IP Auto Renew
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '30 1 * * *'
 
 jobs:
   noip-renew:
