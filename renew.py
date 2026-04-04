@@ -120,9 +120,7 @@ if __name__ == "__main__":
     browser_options = webdriver.FirefoxOptions()
     browser_options.add_argument("--headless")
     browser_options.profile = profile
-    service = Service(
-        executable_path="/usr/local/bin/geckodriver", log_output="/dev/null"
-    )
+    service = Service()
     browser = webdriver.Firefox(options=browser_options, service=service)
 
     # Open browser
