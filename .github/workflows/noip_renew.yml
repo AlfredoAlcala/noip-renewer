@@ -1,0 +1,21 @@
+name: No-IP Renewer
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 */15 * *' # This runs it automatically every 15 days
+
+jobs:
+  renew:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run No-IP Renewer
+        run: |
+          docker build -t noip-renewer .
+          docker run --rm \
+            -e NOIP_USERNAME="${{ secrets.NOIP_USERNAME }}" \
+            -e NOIP_PASSWORD="${{ secrets.NOIP_PASSWORD }}" \
+            noip-renewer
