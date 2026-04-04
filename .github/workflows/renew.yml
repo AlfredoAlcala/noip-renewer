@@ -1,0 +1,16 @@
+name: No-IP Auto Renew
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 */15 * *'
+
+jobs:
+  noip-renew:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run No-IP Renewer
+        uses: docker://simaosilva/noip-renewer:latest
+        env:
+          NOIP_USERNAME: ${{ secrets.NO_IP_USERNAME }}
+          NOIP_PASSWORD: ${{ secrets.NO_IP_PASSWORD }}
