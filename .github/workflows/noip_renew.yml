@@ -32,3 +32,9 @@ jobs:
           NO_IP_USERNAME: ${{ secrets.NOIP_USERNAME }}
           NO_IP_PASSWORD: ${{ secrets.NOIP_PASSWORD }}
         run: python renew.py
+      - name: Upload Error Screenshot
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-screenshot
+          path: error.png
